@@ -22,7 +22,7 @@ class LoginController extends Controller
 
 		try {
 
-		    $response = $client->post( env('APP_URL') . 'oauth/token', [
+		    $response = $client->post( env('APP_URL') . '/oauth/token', [
 		        'form_params' => [
 		            'client_id' => 2,
 		            'client_secret' => 'XQ3t797U5kBh4ejnSPGtB4jvwZno3QtSx8LRLDf2',
