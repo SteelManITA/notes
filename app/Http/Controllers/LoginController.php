@@ -24,8 +24,8 @@ class LoginController extends Controller
 
 			$response = $client->post( env('APP_URL') . '/oauth/token', [
 				'form_params' => [
-				'client_id' => 2,
-				'client_secret' => 'XQ3t797U5kBh4ejnSPGtB4jvwZno3QtSx8LRLDf2',
+				'client_id' => env('CLIENT_ID'),
+				'client_secret' => env('CLIENT_SECRET'),
 				'grant_type' => 'password',
 				'username' => $username,
 				'password' => $password,

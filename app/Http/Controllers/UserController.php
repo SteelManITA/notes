@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use App\Client;
 
 class UserController extends Controller
 {
@@ -27,15 +26,12 @@ class UserController extends Controller
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
 			]);
-		/*
-    	// And created user until here.
-		$client = Client::where('password_client', 1)->first();
-
+		
     	// Is this $request the same request? I mean Request $request? Then wouldn't it mess the other $request stuff? Also how did you pass it on the $request in $proxy? Wouldn't Request::create() just create a new thing?
 		$request->request->add([
 			'grant_type'    => 'password',
-			'client_id'     => $client->id,
-			'client_secret' => $client->secret,
+			'client_id' => env('CLIENT_ID'),
+			'client_secret' => env('CLIENT_SECRET'),
 			'username'      => $data['email'],
 			'password'      => $data['password'],
 			'scope'         => null,
@@ -47,6 +43,6 @@ class UserController extends Controller
 			'POST'
 			);
 		return \Route::dispatch($token);
-		*/
+		
 	}
 }
