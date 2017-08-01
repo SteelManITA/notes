@@ -20,8 +20,9 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::group(['middleware' => 'auth:api'], function() {
 		Route::get('/note', 'NoteController@index');
 		Route::post('/note/add', 'NoteController@add');
-		Route::post('/note/edit/{id}', 'NoteController@edit');
-		Route::delete('/note/delete/{id}', 'NoteController@delete');
+		Route::post('/note/{id}/edit', 'NoteController@edit');
+		Route::post('/note/{id}/share', 'SharedNotesController@share');
+		Route::delete('/note/{id}/delete', 'NoteController@delete');
 	});
 
 });
