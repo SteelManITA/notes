@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1'], function () {
 
 	Route::post('/login', 'LoginController@login');
+	Route::post('/register', 'UserController@register');
 
 	Route::group(['middleware' => 'auth:api'], function() {
 		Route::get('/note', 'NoteController@index');

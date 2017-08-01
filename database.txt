@@ -1,0 +1,13 @@
+Hi
+
+Your account number is: 230278
+
+Your new database is now ready to use.
+
+To connect to your database use these details
+
+Server: sql11.freemysqlhosting.net
+Name: sql11187925
+Username: sql11187925
+Password: 8Pmnw3Htjp
+Port number: 3306
