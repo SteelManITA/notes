@@ -15,13 +15,23 @@ class SharedNotesController extends Controller
 	public function get(Request $request, $note_id) {
 		$collaboratorIds = (array) DB::table('shared-notes')->where('note_id', $note_id)->pluck('user_id');
 		$collaboratorIds = reset($collaboratorIds);
-
 		$collaborators = User::find($collaboratorIds);
+
+
+
+		$availableUsers = (array) User::get();
+		$availableUsers = reset($availableUsers);
+		unset($availableUsers[array_search(User::find(Auth::user()->id), $availableUsers)]);
+
+		foreach ($collaborators as $collaborator) {
+			unset($availableUsers[array_search(User::find($collaborator->id), $availableUsers)]);
+		}
 
 		return [
 			'owner' => User::find(Note::where('id', $note_id)->value('user_id')),
-			'collaborators' => $collaborators
-			];
+			'collaborators' => $collaborators,
+			'availableUsers' => $availableUsers,
+		];
 	}
 
     public function add(Request $request, $note_id) {
