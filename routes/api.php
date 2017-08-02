@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('/note/add', 'NoteController@add');
 		Route::post('/note/{id}/edit', 'NoteController@edit');
 		Route::post('/note/{id}/share', 'SharedNotesController@share');
+		Route::get('/note/{id}/getUsersWithNote', 'SharedNotesController@getUsersWithNote');
 		Route::delete('/note/{id}/delete', 'NoteController@delete');
 	});
 
