@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use App\Note;
 use App\SharedNotes;
 
 class SharedNotesController extends Controller
@@ -18,7 +19,7 @@ class SharedNotesController extends Controller
 		$collaborators = User::find($collaboratorIds);
 
 		return [
-			'owner' => User::find(Auth::user()->id),
+			'owner' => User::find(Note::where('id', $note_id)->value('user_id')),
 			'collaborators' => $collaborators
 			];
 	}
