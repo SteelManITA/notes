@@ -18,12 +18,22 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::post('/register', 'UserController@register');
 
 	Route::group(['middleware' => 'auth:api'], function() {
-		Route::get('/note', 'NoteController@index');
-		Route::post('/note/add', 'NoteController@add');
-		Route::post('/note/{id}/edit', 'NoteController@edit');
-		Route::post('/note/{id}/share', 'SharedNotesController@share');
-		Route::get('/note/{id}/getUsersWithNote', 'SharedNotesController@getUsersWithNote');
-		Route::delete('/note/{id}/delete', 'NoteController@delete');
+
+		Route::group(['prefix' => 'note'], function() {
+			Route::get('/', 'NoteController@get');
+			Route::post('/add', 'NoteController@add');
+			Route::post('/{note_id}/edit', 'NoteController@edit');
+			Route::delete('/{note_id}/delete', 'NoteController@delete');
+
+			Route::group(['prefix' => '{note_id}/collaborator'], function(){
+				Route::get('/', 'SharedNotesController@get');
+				Route::post('/add', 'SharedNotesController@add');
+				Route::delete('{collaborator_id}/delete', 'SharedNotesController@delete');
+			});
+
+		});
+
+		
 	});
 
 });

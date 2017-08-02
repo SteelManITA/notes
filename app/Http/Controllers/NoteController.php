@@ -17,7 +17,7 @@ class NoteController extends Controller
 		$this->fields = Schema::getColumnListing('notes');
 	}
 
-	public function index() {
+	public function get() {
 		$userNotesId = (array) DB::table('notes')->where('user_id', Auth::user()->id)->pluck('id');
 		$sharedWithUserNoteIds = (array) DB::table('shared-notes')->where('user_id', Auth::user()->id)->pluck('note_id');
 		$noteIds = array_merge(reset($sharedWithUserNoteIds), reset($userNotesId));
@@ -34,13 +34,13 @@ class NoteController extends Controller
 		$note->fill($input);
 		$note->save();
 
-		return json_encode($note);
+		return $note;
 	}
 
-	public function edit(Request $request, $id) {
+	public function edit(Request $request, $note_id) {
 		$input = $request->intersect($this->fields);
 
-		$note = Note::find($id);
+		$note = Note::find($note_id);
 
 		foreach ($input as $key => $value) {
 			$note->$key = $value;
@@ -48,13 +48,13 @@ class NoteController extends Controller
 
 		$note->save();
 
-		return json_encode($note);
+		return $note;
 	}
 	
-	public function delete(Request $request, $id) {
-		$note = Note::find($id);
+	public function delete(Request $request, $note_id) {
+		$note = Note::find($note_id);
 		$note->delete();
-		return json_encode($note);
+		return $note;
 	}
 
 }

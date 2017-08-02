@@ -11,27 +11,44 @@ use App\SharedNotes;
 
 class SharedNotesController extends Controller
 {
-    public function share(Request $request, $id) {
-		$input = $request->intersect(['email']);
+	public function get(Request $request, $note_id) {
+		$collaboratorIds = (array) DB::table('shared-notes')->where('note_id', $note_id)->pluck('user_id');
+		$collaboratorIds = reset($collaboratorIds);
 
-		$userId = User::where('email', $input['email'])->first()->id;
+		$collaborators = User::find($collaboratorIds);
 
-		$sharedNote = new SharedNotes;
-		$sharedNote->user_id = $userId;
-		$sharedNote->note_id = $id;
-
-		$sharedNote->save();
-
-		return json_encode($sharedNote);
+		return [
+			'owner' => User::find(Auth::user()->id),
+			'collaborators' => $collaborators
+			];
 	}
 
-	public function getUsersWithNote(Request $request, $id) {
-		$userIds = (array) DB::table('shared-notes')->where('note_id', $id)->pluck('user_id');
-		$userIds = reset($userIds);
+    public function add(Request $request, $note_id) {
+		$input = $request->intersect(['email']);
 
-		$users = User::find($userIds);
+		$userId = User::where('email', $input['email'])->firstOrFail()->id;
 
-		return json_encode($users);
+		$alreadyExists = DB::table('shared-notes')->where('note_id', $note_id)->where('user_id', $userId)->count();
+
+		if ($alreadyExists == 0 && $userId != Auth::user()->id) {
+			$sharedNote = new SharedNotes;
+			$sharedNote->user_id = $userId;
+			$sharedNote->note_id = $note_id;
+
+			$sharedNote->save();
+
+			return $sharedNote;
+		}
+
+		return [
+			'error' => 'Si sta tentando di aggiungere un collaboratore già presente o non registrato o se stessi.'
+		];
+	}
+
+	public function delete(Request $request, $note_id, $collaborator_id) {
+		$collaborator = SharedNotes::where('note_id', $note_id)->where('user_id', $collaborator_id);
+		$collaborator->delete();
+		return json_encode($collaborator);
 	}
 
 }
