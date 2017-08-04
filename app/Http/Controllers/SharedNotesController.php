@@ -21,10 +21,10 @@ class SharedNotesController extends Controller
 
 		$availableUsers = (array) User::get();
 		$availableUsers = reset($availableUsers);
-		unset($availableUsers[array_search(User::find(Auth::user()->id), $availableUsers)]);
+		array_splice($availableUsers, array_search(User::find(Auth::user()->id), $availableUsers), 1);
 
 		foreach ($collaborators as $collaborator) {
-			unset($availableUsers[array_search(User::find($collaborator->id), $availableUsers)]);
+			array_splice($availableUsers, array_search($collaborator, $availableUsers), 1);
 		}
 
 		return [
